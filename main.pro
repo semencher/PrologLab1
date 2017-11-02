@@ -1,11 +1,9 @@
-﻿% Copyright
-
-implement main
+﻿implement main
     open core
 
 class predicates
     findPath : (boolean [out]).
-    enterPoints : (integer, integer).
+    enterEdges : (integer, integer).
     byPath : (integer, integer, boolean [out]).
     isFind : (integer, integer, boolean [out]).
 
@@ -17,7 +15,7 @@ clauses
         console::write("Enter count of edge: "),
         console::nl,
         EdgeCount = console::read(),
-        enterPoints(0, EdgeCount),
+        enterEdges(0, EdgeCount),
         console::nl,
         console::write("Path: "),
         console::nl,
@@ -26,15 +24,15 @@ clauses
         console::nl,
         byPath(BeginPoint, EndPoint, Result).
 
-    enterPoints(I, Size) :-
+    enterEdges(I, Size) :-
         I < Size,
         !,
         FirstOp = console::read(),
         SecondOp = console::read(),
         assert(edge(FirstOp, SecondOp)),
-        enterPoints(I + 1, Size).
+        enterEdges(I + 1, Size).
 
-    enterPoints(_I, _Size).
+    enterEdges(_I, _Size).
 
     isFind(BeginPoint, EndPoint, Result) :-
         edge(BeginPoint, X),
@@ -50,11 +48,6 @@ clauses
         !,
         Result = true.
 
-    byPath(BeginPoint, _EndPoint, Result) :-
-        not(edge(BeginPoint, _X)),
-        !,
-        Result = false.
-
     byPath(BeginPoint, EndPoint, Result) :-
         edge(BeginPoint, X),
         retract(edge(BeginPoint, X)),
@@ -63,9 +56,7 @@ clauses
         !,
         Result = true.
 
-    byPath(BeginPoint, EndPoint, Result) :-
-        byPath(BeginPoint, EndPoint, TmpResult),
-        Result = TmpResult.
+    byPath(_, _, false).
 
 clauses
     run() :-
